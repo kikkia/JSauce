@@ -31,7 +31,13 @@ class SauceLimit constructor(private var longLimit: Int, private var shortLimit:
             }
         } while (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong())))
 
-        return shortLimit > 0 && longLimit > 0
+        val canSend = shortLimit > 0 && longLimit > 8
+        if (canSend) {
+            shortLimit--
+            longLimit--
+        }
+
+        return canSend
     }
 
     fun setRemaining(long: Int, short: Int) {
