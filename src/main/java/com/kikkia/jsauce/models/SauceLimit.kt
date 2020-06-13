@@ -17,20 +17,23 @@ class SauceLimit constructor(private var longLimit: Int, private var shortLimit:
     fun canSend() : Boolean {
         // Clear out our ratelimit tracking queues
         val now = Instant.now()
-        do {
-            if (longQueue.peek().isBefore(now.minusSeconds(longRefresh.toLong()))) {
-                longQueue.poll()
-                longLimit++
-            }
-        } while (longQueue.peek().isBefore(now.minusSeconds(longRefresh.toLong())))
-
-        do {
-            if (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong()))) {
-                shortQueue.poll()
-                shortLimit++
-            }
-        } while (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong())))
-
+        if (!longQueue.isEmpty()) {
+            do {
+                if (longQueue.peek().isBefore(now.minusSeconds(longRefresh.toLong()))) {
+                    longQueue.poll()
+                    longLimit++
+                }
+            } while (longQueue.peek().isBefore(now.minusSeconds(longRefresh.toLong())))
+        }
+        if (!shortQueue.isEmpty()) {
+            do {
+                if (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong()))) {
+                    shortQueue.poll()
+                    shortLimit++
+                }
+            } while (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong())))
+        }
+        
         val canSend = shortLimit > 0 && longLimit > 8
         if (canSend) {
             shortLimit--
