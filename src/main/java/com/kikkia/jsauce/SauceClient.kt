@@ -23,8 +23,8 @@ class SauceClient private constructor(builder: Builder) {
 
 
     init {
-        this.token = builder.token
-        this.proxies = builder.proxies
+        this.token = builder.getToken()
+        this.proxies = builder.getProxies()
         this.baseLocalLimit = SauceLimit(100, 4)
         this.authedLocalLimit = SauceLimit(200, 5)
     }
@@ -133,8 +133,8 @@ class SauceClient private constructor(builder: Builder) {
     }
 
     class Builder {
-        var proxies: MutableList<Endpoint> = ArrayList()
-        var token: String? = null
+        private var proxies: MutableList<Endpoint> = ArrayList()
+        private var token: String? = null
 
         fun setToken(token: String) : Builder {
             this.token = token
@@ -144,6 +144,14 @@ class SauceClient private constructor(builder: Builder) {
         fun addProxy(url: String) : Builder {
             this.proxies.add(Endpoint(url, SauceLimit(100, 4)))
             return this
+        }
+
+        fun getProxies() : MutableList<Endpoint> {
+            return proxies
+        }
+
+        fun getToken() : String? {
+            return token
         }
 
         fun build(): SauceClient {
