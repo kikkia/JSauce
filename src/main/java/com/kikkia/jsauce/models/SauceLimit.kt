@@ -33,7 +33,7 @@ class SauceLimit constructor(private var longLimit: Int, private var shortLimit:
                 }
             } while (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong())))
         }
-        
+
         val canSend = shortLimit > 0 && longLimit > 8
         if (canSend) {
             shortLimit--

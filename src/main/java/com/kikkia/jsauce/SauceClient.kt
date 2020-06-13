@@ -55,7 +55,7 @@ class SauceClient private constructor(builder: Builder) {
             try {
                 return getSauceRequest(url)
             } catch (e: Exception) {
-                throw SauceException("Failed to get sauce")
+                throw SauceException("Failed to get sauce", e)
             }
         } else {
             throw TooMuchSauceException("Tried to get sauce but no method had the usage left to do so.")
