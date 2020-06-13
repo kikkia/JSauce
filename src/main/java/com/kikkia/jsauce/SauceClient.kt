@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
+import org.json.JSONException
 import java.lang.Exception
 import org.json.JSONObject
 
@@ -120,14 +121,19 @@ class SauceClient private constructor(builder: Builder) {
                 val result = json.getJSONArray("results").getJSONObject(0)
                 val header = result.getJSONObject("header")
                 val data = result.getJSONObject("data")
+
+                var title = try {
+                    data.getString("title")
+                } catch (e: JSONException) {
+                    data.getString("source")
+                }
+
                 return Sauce(
                     header.getString("thumbnail"),
                     header.getString("similarity").toDouble(),
                     header.getString("index_name"),
                     data.getJSONArray("ext_urls").getString(0),
-                    data.getString("title"),
-                    data.getString("author_name"),
-                    data.getString("author_url")
+                    title
                 )
             }
         }

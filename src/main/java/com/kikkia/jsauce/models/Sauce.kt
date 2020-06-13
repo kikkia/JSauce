@@ -1,3 +1,3 @@
 package com.kikkia.jsauce.models
 
-data class Sauce(val thumbnail: String, val similarity: Double, val index: String, val externalUrl: String, val title: String, val authorName: String, val authorUrl: String)
+data class Sauce(val thumbnail: String, val similarity: Double, val index: String, val externalUrl: String, val title: String)
