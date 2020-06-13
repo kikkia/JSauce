@@ -124,7 +124,7 @@ class SauceClient private constructor(builder: Builder) {
                     header.getString("thumbnail"),
                     header.getString("similarity").toDouble(),
                     header.getString("index_name"),
-                    data.getString("ext_urls"),
+                    data.getJSONArray("ext_urls").getString(0),
                     data.getString("title"),
                     data.getString("author_name"),
                     data.getString("author_url")
