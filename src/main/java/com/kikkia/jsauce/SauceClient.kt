@@ -108,6 +108,7 @@ class SauceClient private constructor(builder: Builder) {
                 throw SauceException("Hit status code ${response.statusLine.statusCode} on request to proxy")
             }
             else -> {
+                println(response.entity.toString())
                 val json = JSONObject(response.entity.toString())
 
                 endpoint?.rateLimit?.setRemaining(json.getInt("long_remaining"), json.getInt("short_remaining"))
