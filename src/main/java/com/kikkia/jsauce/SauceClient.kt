@@ -6,13 +6,13 @@ import com.kikkia.jsauce.models.SauceLimit
 import com.kikkia.jsauce.models.exceptions.NoSauceFoundException
 import com.kikkia.jsauce.models.exceptions.SauceException
 import com.kikkia.jsauce.models.exceptions.TooMuchSauceException
+import com.kikkia.jsauce.utils.JsonParseUtils.Companion.getSauceForData
 import org.apache.http.HttpResponse
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
-import org.json.JSONException
 import java.lang.Exception
 import org.json.JSONObject
 
@@ -122,19 +122,7 @@ class SauceClient private constructor(builder: Builder) {
                 val header = result.getJSONObject("header")
                 val data = result.getJSONObject("data")
 
-                var title = try {
-                    data.getString("title")
-                } catch (e: JSONException) {
-                    data.getString("source")
-                }
-
-                return Sauce(
-                    header.getString("thumbnail"),
-                    header.getString("similarity").toDouble(),
-                    header.getString("index_name"),
-                    data.getJSONArray("ext_urls").getString(0),
-                    title
-                )
+                return getSauceForData(header, data)
             }
         }
     }
