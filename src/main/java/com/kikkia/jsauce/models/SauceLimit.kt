@@ -23,7 +23,7 @@ class SauceLimit constructor(private var longLimit: Int, private var shortLimit:
                     longQueue.poll()
                     longLimit++
                 }
-            } while (longQueue.peek().isBefore(now.minusSeconds(longRefresh.toLong())))
+            } while (!longQueue.isEmpty() && longQueue.peek().isBefore(now.minusSeconds(longRefresh.toLong())))
         }
         if (!shortQueue.isEmpty()) {
             do {
@@ -31,13 +31,15 @@ class SauceLimit constructor(private var longLimit: Int, private var shortLimit:
                     shortQueue.poll()
                     shortLimit++
                 }
-            } while (shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong())))
+            } while (!shortQueue.isEmpty() && shortQueue.peek().isBefore(now.minusSeconds(shortRefresh.toLong())))
         }
 
-        val canSend = shortLimit > 0 && longLimit > 8
+        val canSend = shortLimit > 0 && longLimit > 0
         if (canSend) {
             shortLimit--
+            shortQueue.offer(Instant.now())
             longLimit--
+            longQueue.offer(Instant.now())
         }
 
         return canSend
