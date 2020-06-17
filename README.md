@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/kikkia/JSauce.svg)](https://jitpack.io/#kikkia/JSauce)
+
 # JSauce
 Java/Kotlin Library to get the sauce for given media. Wraps the SauceNAO api. 
 
